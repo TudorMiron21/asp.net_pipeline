@@ -23,6 +23,10 @@ jobs:
           az group create --name DevProjectDotNet --location northeurope
           az webapp list --query "[?state=='Running']"
           
+      - name: Create Web App
+        run: |
+          az webapp create --name tudorDotNetApp --resource-group DevProjectDotNet --plan tudorPlan --runtime "DOTNET|6.0" --deployment-local-git
+          
       - uses: actions/checkout@v2
 
       - name: Set up .NET Core
