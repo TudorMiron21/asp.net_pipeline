@@ -53,7 +53,7 @@ jobs:
       
       - name: Create Alert Rule
         run: |
-          export scope=$(az vm show -g DevProjectDotNet -n VM10 --query "id" -o tsv)
+          scope=$(az vm show -g DevProjectDotNet -n VM10 --query "id" -o tsv)
           condition=$(az monitor metrics alert condition create --aggregation Average --metric "Percentage CPU" --op GreaterThan --type static --threshold 90 --output tsv)
           az monitor metrics alert create --name tudorAlert1 --resource-group DevProjectDotNet --scopes $(echo $scope | tr -d '\r') --condition "avg Percentage CPU > 90" --description "Test High CPU" --debug
         
