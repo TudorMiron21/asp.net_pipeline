@@ -22,7 +22,12 @@ jobs:
         run: |
           az group create --name DevProjectDotNet --location northeurope
           az webapp list --query "[?state=='Running']"
-          
+        
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x  # replace x with the latest patch version of .NET 6.0
+
       - name: Create Web App
         run: |
           az webapp create --name tudorDotNetApp --resource-group DevProjectDotNet --plan tudorPlan --runtime "DOTNET|6.0" --deployment-local-git
