@@ -45,6 +45,23 @@ jobs:
         run: |
           az sql db create --name tudorDatabase1 --resource-group DevProjectDotNet --server tudorSQLServer1 --tier Basic --edition Basic --collation SQL_Latin1_General_CP1_CI_AS
 
+      #This command creates an autoscale setting for the tudorApp web app. It specifies that the app should have at least 1 instance, at most 5 instances, and maintain an average CPU utilization of 70% over a 5-minute period. It also specifies that the time grain for evaluating the condition should be 5 minutes. You can adjust these values to suit your needs.
+      #- name: Create Autoscale settings
+      #  run: |
+       #   az monitor autoscale create --resource-group tudorDevopsProject --resource tudorApp --resource-type Microsoft.Web/sites --name tudorAutoscale --min-count 1 --max-count 3 --count 2
+      #    az monitor autoscale rule create -g tudorDevopsProject --autoscale-name tudorApp --scale out 1 --condition "CpuPercentage > 80 avg 5m"
+      
+      - name: Create Alert Rule
+        run: |
+          export scope=$(az vm show -g DevProjectDotNet -n VM1 --query "id" -o tsv)
+          condition=$(az monitor metrics alert condition create --aggregation Average --metric "Percentage CPU" --op GreaterThan --type static --threshold 90 --output tsv)
+          az monitor metrics alert create --name tudorAlert --resource-group tudorDevopsProject --scopes $(echo $scope | tr -d '\r') --condition "avg Percentage CPU > 90" --description "Test High CPU" --debug
+        
+      - name: Create App Insights
+        run : |
+          az config set extension.use_dynamic_install=yes_without_prompt
+          az monitor app-insights component create --app tudorInsights --location northeurope --resource-group tudorDevopsProject --application-type web --retention-time 30
+        
       - uses: actions/checkout@v2
 
       - name: Set up .NET Core
