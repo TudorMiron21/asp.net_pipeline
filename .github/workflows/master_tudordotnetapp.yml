@@ -51,11 +51,11 @@ jobs:
        #   az monitor autoscale create --resource-group tudorDevopsProject --resource tudorApp --resource-type Microsoft.Web/sites --name tudorAutoscale --min-count 1 --max-count 3 --count 2
       #    az monitor autoscale rule create -g tudorDevopsProject --autoscale-name tudorApp --scale out 1 --condition "CpuPercentage > 80 avg 5m"
       
-      - name: Create Alert Rule
-        run: |
-          scope=$(az vm show -g DevProjectDotNet -n VM10 --query "id" -o tsv)
-          condition=$(az monitor metrics alert condition create --aggregation Average --metric "Percentage CPU" --op GreaterThan --type static --threshold 90 --output tsv)
-          az monitor metrics alert create --name tudorAlert1 --resource-group DevProjectDotNet --scopes $(echo $scope | tr -d '\r') --condition "avg Percentage CPU > 90" --description "Test High CPU" --debug
+      #- name: Create Alert Rule
+      #  run: |
+      #    scope=$(az vm show -g DevProjectDotNet -n VM10 --query "id" -o tsv)
+      #    condition=$(az monitor metrics alert condition create --aggregation Average --metric "Percentage CPU" --op GreaterThan --type static --threshold 90 --output tsv)
+      #    az monitor metrics alert create --name tudorAlert1 --resource-group DevProjectDotNet --scopes $(echo $scope | tr -d '\r') --condition "avg Percentage CPU > 90" --description "Test High CPU" --debug
         
       - name: Create App Insights
         run : |
