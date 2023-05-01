@@ -14,9 +14,6 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    
-      - name: Install Azure Login
-        run: az extension add --name azure-cli-iot-ext
       - uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
